@@ -1,11 +1,18 @@
 require 'spec_helper_acceptance'
 
-describe 'jmxtrans class' do
-  context 'default parameters' do
+describe 'jmxtrans class', :if => fact('osfamily') == 'Debian' do
+  context 'sensible parameters for a Debian system' do
+
     # Using puppet_apply as a helper
     it 'should work idempotently with no errors' do
       pp = <<-EOS
-      class { 'jmxtrans': }
+      class{'::java':}
+      ->
+      class { 'jmxtrans':
+        package_name  => 'jmxtrans',
+        service_name  => 'jmxtrans',
+        package_source => 'http://central.maven.org/maven2/org/jmxtrans/jmxtrans/254/jmxtrans-254.deb'
+      }
       EOS
 
       # Run it twice and test for idempotency

@@ -18,15 +18,28 @@ env:
   - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
 matrix:
+  include:
+  - rvm: '2.1'
+    sudo: required
+    services: docker
+    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="fedora-22-docker"
+    script: bundle exec rake acceptance
+    bundler_args: --without development
+  - rvm: '2.1'
+    sudo: required
+    services: docker
+    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="ubuntu-1604-docker"
+    script: bundle exec rake acceptance
+    bundler_args: --without development
   exclude:
   # Ruby 1.9.3
   - rvm: 1.9.3
     env: PUPPET_VERSION="~> 2.7.0"
-    
+
   # Ruby 2.0.0
   - rvm: 2.0.0
     env: PUPPET_VERSION="~> 2.7.0"
-    
+
   # Ruby 2.1.0
   - rvm: 2.1.0
     env: PUPPET_VERSION="~> 2.7.0"
