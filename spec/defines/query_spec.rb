@@ -45,6 +45,48 @@ describe 'jmxtrans::query' do
     end
   end
 
+  context 'jmxtrans::query pretty' do
+    let(:title) { 'puppetserver' }
+    let(:params) {{
+      :host    => 'w2',
+      :port    => 1099,
+      :queries => [],
+      :pretty  => true,
+    }}
+
+    output = File.read(File.join(fixture_dir, 'pretty.json'))
+
+    it do
+      is_expected.to contain_file('/var/lib/jmxtrans/puppetserver.json').with({
+        :ensure  => 'file',
+        :owner   => 'jmxtrans',
+        :mode    => '0640',
+        :content => output
+      })
+    end
+  end
+
+  context 'jmxtrans::query not pretty' do
+    let(:title) { 'puppetserver' }
+    let(:params) {{
+      :host    => 'w2',
+      :port    => 1099,
+      :queries => [],
+      :pretty  => false,
+    }}
+
+    output = File.read(File.join(fixture_dir, 'not_pretty.json'))
+
+    it do
+      is_expected.to contain_file('/var/lib/jmxtrans/puppetserver.json').with({
+        :ensure  => 'file',
+        :owner   => 'jmxtrans',
+        :mode    => '0640',
+        :content => output
+      })
+    end
+  end
+
   context 'jmxtrans::query extras' do
     let(:title) { 'puppetserver' }
     let(:params) {{
